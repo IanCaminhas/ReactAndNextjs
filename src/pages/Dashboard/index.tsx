@@ -24,7 +24,7 @@ export const Dashboard: React.FC = () => {
           />
           <div>
             <strong>iancaminhas/name_repository</strong>
-            <p>Repositório do mini curso gratuito de reactjs</p>
+            <p>Curso de reactjs</p>
           </div>
           <FiChevronRight size={20} />
         </a>
