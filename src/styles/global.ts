@@ -29,6 +29,10 @@ export const GlobalStyle = createGlobalStyle`
     -weki-font-smoothing: antialiased;
   }
 
+  border-style,:-ms-input-placeholder,textarea,::selection, button {
+    font: 400 1rem "Roboto", sans-serif;
+  }
+
   #root {
     //a div root vai ter tamanho máximo de 960px
     max-width: 960px;
@@ -45,6 +49,4 @@ export const GlobalStyle = createGlobalStyle`
     color: inherit;
     text-decoration: none;
   }
-
-
 `;
