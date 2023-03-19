@@ -4,6 +4,8 @@ import logo from '../../assets/logo.svg';
 //Através da segiunte biblioteca, consigo importar icones do Font Awesome, Material UI, bootstrap, etc... tudo compilado dentro de uma lib: npm install react-icons
 //aqui estão todos os icones do fader icon. Fazendo react-icons/ preciso informar a fonte dos ícones
 import { FiChevronRight } from 'react-icons/fi';
+//com Link, conseguimos navegar entre componentes da aplicação
+import { Link } from 'react-router-dom';
 
 import { api } from '../../services/api';
 
@@ -122,10 +124,10 @@ export const Dashboard: React.FC = () => {
 
       <Repos>
         {repos.map(repository => (
-          <a
+          <Link
             //{`/repositories/${repository.full_name} está servindo path="/repositories/:repository" no arquivo dashboard/index.tsx
             //Antes era assim: href="/repositories"... Foi transformado para href={`/repositories/${repository.full_name}`} para comportar o param
-            href={`/repositories/${repository.full_name}`}
+            to={`/repositories/${repository.full_name}`}
             key={repository.full_name}
           >
             <img
@@ -137,7 +139,7 @@ export const Dashboard: React.FC = () => {
               <p>{repository.description}</p>
             </div>
             <FiChevronRight size={20} />
-          </a>
+          </Link>
         ))}
       </Repos>
     </>
