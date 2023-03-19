@@ -2,7 +2,7 @@ import React from 'react';
 //Tudo relativo a rotas, vamos utilizar o react-router-dom
 //useRouteMatch -> usar a rota que coincide ou a que eu espero
 import { Link, useRouteMatch } from 'react-router-dom';
-import { Header } from './styles';
+import { Header, RepoInfo } from './styles';
 import logo from '../../assets/logo.svg';
 import { FiChevronLeft } from 'react-icons/fi';
 
@@ -25,6 +25,31 @@ export const Repo: React.FC = () => {
           Voltar
         </Link>
       </Header>
+
+      <RepoInfo>
+        <head>
+          <img src="" alt="Ian Pereira Caminhas" />
+          <div>
+            <strong>IanCaminhas/ReactAndNextjs</strong>
+            <p>Repositório do mini curso gratuito de reactjs</p>
+          </div>
+        </head>
+
+        <ul>
+          <li>
+            <strong>2330</strong>
+            <span>Stars</span>
+          </li>
+          <li>
+            <strong>210</strong>
+            <span>Forks</span>
+          </li>
+          <li>
+            <strong>79</strong>
+            <span>Issues abertas</span>
+          </li>
+        </ul>
+      </RepoInfo>
     </>
   );
 };
