@@ -9,6 +9,7 @@ interface RepositoryParams {
 
 export const Repo: React.FC = () => {
   //O params vai trazer o parâmetro que está sendo passado para essa página aqui
+  //desestruturei apenas o params. Tenho outros recursos também a dar espaço e e dar um ctrl + espaço
   const { params } = useRouteMatch<RepositoryParams>();
   return <h1>Repo: {params.repository}</h1>;
 };
