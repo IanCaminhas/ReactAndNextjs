@@ -122,7 +122,12 @@ export const Dashboard: React.FC = () => {
 
       <Repos>
         {repos.map(repository => (
-          <a href="/repositories" key={repository.full_name}>
+          <a
+            //{`/repositories/${repository.full_name} está servindo path="/repositories/:repository" no arquivo dashboard/index.tsx
+            //Antes era assim: href="/repositories"... Foi transformado para href={`/repositories/${repository.full_name}`} para comportar o param
+            href={`/repositories/${repository.full_name}`}
+            key={repository.full_name}
+          >
             <img
               src={repository.owner.avatar_url}
               alt={repository.owner.login}
