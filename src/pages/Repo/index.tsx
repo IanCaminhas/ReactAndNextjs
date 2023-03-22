@@ -12,7 +12,36 @@ interface RepositoryParams {
   repository: string;
 }
 
+//essas são as informações que vou pegar na Api do Github. O resto, é para ignorar
+interface GithubRepository {
+  full_name: string;
+  description: string;
+  forks_count: number;
+  open_issues_count: number;
+  stargazers_count: number;
+  owner: {
+    login: string;
+    avatar_url: string;
+  };
+}
+
+interface GithubIssue {
+  id: number;
+  title: string;
+  html_url: string; //Quando a pessoa clicar em cima da issue, ela vai redirecionada para a página do Github no link específico daquela issue
+  user: {
+    login: string;
+  };
+}
+
 export const Repo: React.FC = () => {
+  //valor inicial null |null. Se não for null, será do tipo GithubRepository
+  const [repository, setRepository] = React.useState<GithubRepository | null>(
+    null,
+  );
+
+  const [issues, setIssues] = React.useState<GithubIssue[]>([]);
+
   //O params vai trazer o parâmetro que está sendo passado para essa página aqui
   //desestruturei apenas o params. Tenho outros recursos também a dar espaço e e dar um ctrl + espaço
   const { params } = useRouteMatch<RepositoryParams>();
@@ -21,11 +50,11 @@ export const Repo: React.FC = () => {
   React.useEffect(() => {
     api
       .get(`repos/${params.repository}`)
-      .then(response => console.log(response.data));
+      .then(response => setRepository(response.data)); //essa rota busca os repositórios
 
     api
       .get(`repos/${params.repository}/issues`)
-      .then(response => console.log(response.data));
+      .then(response => setIssues(response.data)); //essa rota busca as issues
   }, [params.repository]);
 
   return (
@@ -38,40 +67,50 @@ export const Repo: React.FC = () => {
         </Link>
       </Header>
 
-      <RepoInfo>
-        <header>
-          <img src="" alt="Ian Pereira Caminhas" />
-          <div>
-            <strong>IanCaminhas/ReactAndNextjs</strong>
-            <p>Repositório do mini curso gratuito de reactjs</p>
-          </div>
-        </header>
+      {repository && ( //se o repository for nulo, <RepoInfo></RepoInfo> estará oculto... Caso contrario, o que estiver entre <RepoInfo></RepoInfo> sera renderizado
+        <RepoInfo>
+          <header>
+            <img
+              src={repository.owner.avatar_url}
+              alt={repository.owner.login}
+            />
+            <div>
+              <strong>{repository.full_name}</strong>
+              <p>{repository.description}</p>
+            </div>
+          </header>
 
-        <ul>
-          <li>
-            <strong>2330</strong>
-            <span>Stars</span>
-          </li>
-          <li>
-            <strong>210</strong>
-            <span>Forks</span>
-          </li>
-          <li>
-            <strong>79</strong>
-            <span>Issues abertas</span>
-          </li>
-        </ul>
-      </RepoInfo>
+          <ul>
+            <li>
+              <strong>{repository.stargazers_count}</strong>
+              <span>Stars</span>
+            </li>
+            <li>
+              <strong>{repository.forks_count}</strong>
+              <span>Forks</span>
+            </li>
+            <li>
+              <strong>{repository.open_issues_count}</strong>
+              <span>Issues abertas</span>
+            </li>
+          </ul>
+        </RepoInfo>
+      )}
 
       <Issues>
-        <Link to="/">
-          <div>
-            <strong>dnfdfngdrgioegh dgiodrhgidrhgdro</strong>
-            <p>dfdfgdfgdfgdfg dfgkldnfgkldn nsflkdngfl</p>
-          </div>
-
-          <FiChevronRight size={20} />
-        </Link>
+        {issues.map(
+          (
+            issue, // como vou ter que acessar uma página extrena, vou ter que usar o <a></a> ao invés de <Link></Link>
+          ) => (
+            <a href={issue.html_url} key={issue.id}>
+              <div>
+                <strong>{issue.title}</strong>
+                <p>{issue.user.login}</p>
+              </div>
+              <FiChevronRight size={20} />
+            </a>
+          ),
+        )}
       </Issues>
     </>
   );
