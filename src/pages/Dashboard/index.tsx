@@ -48,6 +48,9 @@ export const Dashboard: React.FC = () => {
   //Vai compartar uma string dizendo para o usuário o que ele precisa fazer para usar a aplicação
   const [inputError, setInputError] = React.useState('');
 
+  //valor inicial null. Pode ser um elemento formulário: HTMLFormElement, elemento genérico
+  const formEl = React.useRef<HTMLFormElement>(null);
+
   //React.ChangeEvent<HTMLInputElement> -> qual tipo de elemento hmtl esse evento está atrelado ?
   //pego onde o evento gera alteração: ChangeEvent... Alteração em que ? um elemento input HTML -> HTMLInputElement
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -89,22 +92,29 @@ export const Dashboard: React.FC = () => {
       return;
     }
 
-    //Ao fazer o get, o axios já sabe o que vai retornar: await api.get<GithubRepository>
-    //Nós informamos a url base, não é necessário informá-la mais: 'https://api.github.com'. Está em services/api.ts
-    const response = await api.get<GithubRepository>(`repos/${newRepo}`);
+    try {
+      //Ao fazer o get, o axios já sabe o que vai retornar: await api.get<GithubRepository>
+      //Nós informamos a url base, não é necessário informá-la mais: 'https://api.github.com'. Está em services/api.ts
+      const response = await api.get<GithubRepository>(`repos/${newRepo}`);
 
-    /* apenas um teste de exemplo hehehe
-    console.log(response);
-    return;
+      /* apenas um teste de exemplo hehehe
+        console.log(response);
+        return;
     */
-
-    const repository = response.data;
-    //. estou pegando todos os elementos do array atual mais o repositório buscado.
-    //...repos é o spread que pega todos os elementos atuais
-    //estou atualizando a lista de repositórios
-    setRepos([...repos, repository]);
+      const repository = response.data;
+      //. estou pegando todos os elementos do array atual mais o repositório buscado.
+      //...repos é o spread que pega todos os elementos atuais
+      //estou atualizando a lista de repositórios
+      setRepos([...repos, repository]);
+      //Depois que o repositorio for encontrado, retirar a mensagem 'Repositorio nao encontrado no Github'. Se pesquisar um repo que não existe, a mensagem fica settada
+      setInputError('');
+    } catch {
+      setInputError('Repositorio nao encontrado no Github');
+    }
 
     //depois de atualizar a lista, vou esvaziar o input
+    //? para os casos em que o current não exista. Por que a inclusão do ?... Porque formEl também pode ser um null
+    formEl.current?.reset();
   }
 
   return (
@@ -112,7 +122,11 @@ export const Dashboard: React.FC = () => {
       <img src={logo} alt="GitCollection" />
       <Title>Catálago de repositórios do Github</Title>
 
-      <Form hasError={Boolean(inputError)} onSubmit={handleAddRepo}>
+      <Form
+        ref={formEl}
+        hasError={Boolean(inputError)}
+        onSubmit={handleAddRepo}
+      >
         <input
           placeholder="username/repository_name"
           onChange={handleInputChange} //quando o input for alterado, executar algo nessa função. Qualquer alteração, jogo no newRepo

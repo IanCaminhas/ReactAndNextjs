@@ -83,7 +83,7 @@ export const Issues = styled.div`
     border-radius: 5px;
     width: 100%;
     padding: 24px;
-    display: block;
+    display: flex;
     text-decoration: none;
     align-items: center;
     transition: transform 0.2s;
