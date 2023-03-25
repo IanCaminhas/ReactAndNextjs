@@ -137,24 +137,32 @@ export const Dashboard: React.FC = () => {
       {inputError && <Error>{inputError}</Error>}
 
       <Repos>
-        {repos.map(repository => (
-          <Link
-            //{`/repositories/${repository.full_name} está servindo path="/repositories/:repository" no arquivo dashboard/index.tsx
-            //Antes era assim: href="/repositories"... Foi transformado para href={`/repositories/${repository.full_name}`} para comportar o param
-            to={`/repositories/${repository.full_name}`}
-            key={repository.full_name}
-          >
-            <img
-              src={repository.owner.avatar_url}
-              alt={repository.owner.login}
-            />
-            <div>
-              <strong>{repository.full_name}</strong>
-              <p>{repository.description}</p>
-            </div>
-            <FiChevronRight size={20} />
-          </Link>
-        ))}
+        {repos.map(
+          (
+            repository,
+            index, //esse index é um contador que começa com valor 0
+          ) => (
+            <Link
+              //{`/repositories/${repository.full_name} está servindo path="/repositories/:repository" no arquivo dashboard/index.tsx
+              //Antes era assim: href="/repositories"... Foi transformado para href={`/repositories/${repository.full_name}`} para comportar o param
+              to={`/repositories/${repository.full_name}`}
+              //essa key deve ser única para cada elemento da lista
+              //estavamos usando o fullname_name como chave. Problema: duas chaves iguais estavam sendo geradas
+              //concatenar o full_name com o index para gerar keys sem duplicidade
+              key={repository.full_name + index}
+            >
+              <img
+                src={repository.owner.avatar_url}
+                alt={repository.owner.login}
+              />
+              <div>
+                <strong>{repository.full_name}</strong>
+                <p>{repository.description}</p>
+              </div>
+              <FiChevronRight size={20} />
+            </Link>
+          ),
+        )}
       </Repos>
     </>
   );
