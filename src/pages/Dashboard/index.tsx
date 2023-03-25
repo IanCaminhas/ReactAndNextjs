@@ -19,7 +19,7 @@ interface GithubRepository {
   };
 }
 
-export const Dashboard: React.FC = () => {
+const Dashboard: React.FC = () => {
   //é estado inicial da lista de repositórios. Inicialmente recebe um [], ou seja, um array vazio.
   //Prciso informar o tipo que o estado vai manipular. No caso é o GithubRepository[]
   //A cada vez que fecho a aplicação, repos não existe mais. Solução: Local Storage
@@ -167,3 +167,5 @@ export const Dashboard: React.FC = () => {
     </>
   );
 };
+
+export default Dashboard;
